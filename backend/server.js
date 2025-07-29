@@ -20,9 +20,18 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/resume-builder';
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: 'https://resume-builder-cha5.onrender.com'
+}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Routes (replace with your actual route files)
+import authRoutes from './routes/auth.js';
+import resumeRoutes from './routes/resumes.js';
+
+app.use('/auth', authRoutes);
+app.use('/resumes', resumeRoutes);
 
 // MongoDB Connection
 mongoose.connect(MONGODB_URI)
