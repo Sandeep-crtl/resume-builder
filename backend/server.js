@@ -25,7 +25,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/resumes', resumeRoutes);
+
 
 // MongoDB Connection
 mongoose.connect(MONGODB_URI)
