@@ -25,12 +25,6 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Routes (replace with your actual route files)
-import authRoutes from './routes/auth.js';
-import resumeRoutes from './routes/resumes.js';
-
-app.use('/auth', authRoutes);
 app.use('/resumes', resumeRoutes);
 
 // MongoDB Connection
