@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3B82F6;
+            --secondary-color: #EBF5FF;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --border-color: #E5E7EB;
+        }
+
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #EBF5FF 0%, #FFFFFF 100%);
+            min-height: 100vh;
+        }
+
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            padding: 2rem;
+        }
+
+        .brand-icon {
+            background: var(--primary-color);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            font-weight: 500;
+            padding: 12px;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563EB;
+            border-color: #2563EB;
+        }
+
+        .btn-outline-secondary {
+            border-color: var(--border-color);
+            color: var(--text-dark);
+            font-weight: 500;
+            padding: 12px;
+        }
+
+        .google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dashboard-nav {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .resume-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .resume-card:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .create-card {
+            border: 2px dashed var(--border-color);
+            background: white;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .create-card:hover {
+            border-color: var(--primary-color);
+            background: var(--secondary-color);
+        }
+
+        .create-icon {
+            background: #DBEAFE;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .create-card:hover .create-icon {
+            background: #BFDBFE;
+        }
+
+        .builder-nav {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .controls-panel {
+            background: white;
+            border-right: 1px solid var(--border-color);
+            height: calc(100vh - 76px);
+            overflow-y: auto;
+        }
+
+        .preview-canvas {
+            background: #F9FAFB;
+            height: calc(100vh - 76px);
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .resume-preview {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            min-height: 800px;
+        }
+
+        .section-header {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .skill-tag {
+            background: #F3F4F6;
+            color: #374151;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            margin: 0.25rem;
+            display: inline-block;
+        }
+
+        .section-manager-item {
+            background: #F9FAFB;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            cursor: move;
+            border: 1px solid var(--border-color);
+        }
+
+        .section-manager-item:hover {
+            background: #F3F4F6;
+        }
+
+        [contenteditable="true"]:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .color-picker {
+            width: 50px;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .range-slider {
+            accent-color: var(--primary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="auth-container">
+        <div class="auth-card">
+            <div class="text-center mb-4">
+                <div class="brand-icon">
+                    <i class="fas fa-user text-white"></i>
+                </div>
+                <h2 class="h3 fw-bold text-dark mb-2">Welcome Back</h2>
+                <p class="text-muted">Sign in to your account</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label class="form-label fw-medium">Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fas fa-envelope text-muted"></i>
+                        </span>
+                        <input type="email" class="form-control border-start-0" placeholder="Enter your email" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-medium">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fas fa-lock text-muted"></i>
+                        </span>
+                        <input type="password" class="form-control border-start-0" placeholder="Enter your password"
+                            required>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                        <label class="form-check-label text-sm" for="rememberMe">Remember me</label>
+                    </div>
+                    <a href="#" class="text-decoration-none text-primary">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mb-3">
+                    <i class="fas fa-sign-in-alt me-2"></i> Sign In
+                </button>
+
+                <div class="text-center mb-3">
+                    <span class="text-muted">Or continue with</span>
+                </div>
+
+
+
+                <p class="text-center text-muted">
+                    Don't have an account?
+                    <a href="#" id="showSignup" class="text-decoration-none text-primary fw-medium">Sign up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Screen -->
+    <div id="signupScreen" class="auth-container hidden">
+        <div class="auth-card">
+            <div class="text-center mb-4">
+                <div class="brand-icon">
+                    <i class="fas fa-user-plus text-white"></i>
+                </div>
+                <h2 class="h3 fw-bold text-dark mb-2">Create Account</h2>
+                <p class="text-muted">Start building your professional resume</p>
+            </div>
+
+            <form id="signupForm">
+                <div class="mb-3">
+                    <label class="form-label fw-medium">Full Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fas fa-user text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" placeholder="Enter your full name"
+                            required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-medium">Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fas fa-envelope text-muted"></i>
+                        </span>
+                        <input type="email" class="form-control border-start-0" placeholder="Enter your email" required>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-medium">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fas fa-lock text-muted"></i>
+                        </span>
+                        <input type="password" class="form-control border-start-0" placeholder="Create a password"
+                            required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mb-3">
+                    <i class="fas fa-user-plus me-2"></i> Create Account
+                </button>
+
+                <div class="text-center mb-3">
+                    <span class="text-muted">Or continue with</span>
+                </div>
+
+
+
+                <p class="text-center text-muted">
+                    Already have an account?
+                    <a href="#" id="showLogin" class="text-decoration-none text-primary fw-medium">Sign in</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden">
+        <nav class="navbar navbar-expand-lg dashboard-nav">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center">
+                    <div class="brand-icon me-3" style="width: 32px; height: 32px;">
+                        <i class="fas fa-user text-white" style="font-size: 14px;"></i>
+                    </div>
+                    <span class="navbar-brand mb-0 h1 fw-bold" id="resume-heading">Resume Builder</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <span class="text-muted me-3">Welcome, <span id="userName">John Smith</span></span>
+                    <button class="btn btn-outline-secondary btn-sm" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid py-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="mb-4">
+                        <h2 class="h3 fw-bold text-dark mb-2">Welcome back, <span id="userNameDash">John Smith</span>!
+                        </h2>
+                        <p class="text-muted">Create and manage your professional resumes</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="h5 fw-semibold text-dark mb-3">Your Resumes</h3>
+
+                        <div class="row" id="resumesContainer">
+                            <!-- Create New Resume Card -->
+                            <div class="col-md-4 mb-4">
+                                <div class="create-card p-4 text-center h-100" id="createNewResume">
+                                    <div class="create-icon">
+                                        <i class="fas fa-plus text-primary"></i>
+                                    </div>
+                                    <h5 class="fw-medium text-dark mb-2">Create New Resume</h5>
+                                    <p class="text-muted mb-0">Start building a new professional resume</p>
+                                </div>
+                            </div>
+
+                            <!-- Existing Resumes will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resume Builder -->
+    <div id="resumeBuilder" class="hidden">
+        <!-- Top Navigation -->
+        <nav class="navbar navbar-expand-lg builder-nav">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-link text-decoration-none text-muted me-3" id="backToDashboard">
+                        <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+                    </button>
+                    <div class="vr me-3"></div>
+                    <span class="navbar-brand mb-0 h1 fw-medium">Resume Builder</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-success btn-sm me-2" id="saveResume">
+                        <i class="fas fa-save me-1"></i> Save
+                    </button>
+                    <button class="btn btn-primary btn-sm me-2" id="downloadResume">
+                        <i class="fas fa-download me-1"></i> Download
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" id="previewResume">
+                        <i class="fas fa-eye me-1"></i> Preview
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="row g-0">
+            <!-- Controls Panel -->
+            <div class="col-md-3 controls-panel">
+                <div class="p-4">
+                    <h5 class="fw-semibold text-dark mb-4">Customization</h5>
+
+                    <!-- Formatting Settings -->
+                    <div class="mb-4">
+                        <h6 class="fw-medium text-dark mb-3">
+                            <i class="fas fa-font me-2"></i> Formatting
+                        </h6>
+
+                        <div class="mb-3">
+                            <label class="form-label">Font</label>
+                            <select class="form-select" id="fontFamily">
+                                <option value="Inter">Inter</option>
+                                <option value="Arial">Arial</option>
+                                <option value="Times New Roman">Times New Roman</option>
+                                <option value="Helvetica">Helvetica</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Font Size</label>
+                            <select class="form-select" id="fontSize">
+                                <option value="12">12px</option>
+                                <option value="14" selected>14px</option>
+                                <option value="16">16px</option>
+                                <option value="18">18px</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Primary Color</label>
+                            <div class="d-flex align-items-center">
+                                <input type="color" class="color-picker me-2" id="primaryColor" value="#3B82F6">
+                                <span class="text-muted" id="colorValue">#3B82F6</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Layout Settings -->
+                    <div class="mb-4">
+                        <h6 class="fw-medium text-dark mb-3">
+                            <i class="fas fa-cog me-2"></i> Layout
+                        </h6>
+
+                        <div class="mb-3">
+                            <label class="form-label">Width: <span id="widthValue">80</span>%</label>
+                            <input type="range" class="form-range range-slider" min="60" max="100" value="80"
+                                id="resumeWidth">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Height: <span id="heightValue">100</span>%</label>
+                            <input type="range" class="form-range range-slider" min="80" max="120" value="100"
+                                id="resumeHeight">
+                        </div>
+                    </div>
+
+                    <!-- Section Manager -->
+                    <div>
+                        <h6 class="fw-medium text-dark mb-3">
+                            <i class="fas fa-arrows-alt me-2"></i> Section Order
+                        </h6>
+                        <div id="sectionManager">
+                            <div class="section-manager-item">
+                                <span class="fw-medium">Summary</span>
+                                <i class="fas fa-grip-vertical float-end text-muted"></i>
+                            </div>
+                            <div class="section-manager-item">
+                                <span class="fw-medium">Experience</span>
+                                <i class="fas fa-grip-vertical float-end text-muted"></i>
+                            </div>
+                            <div class="section-manager-item">
+                                <span class="fw-medium">Education</span>
+                                <i class="fas fa-grip-vertical float-end text-muted"></i>
+                            </div>
+                            <div class="section-manager-item">
+                                <span class="fw-medium">Skills</span>
+                                <i class="fas fa-grip-vertical float-end text-muted"></i>
+                            </div>
+                            <div class="section-manager-item">
+                                <span class="fw-medium">Projects</span>
+                                <i class="fas fa-grip-vertical float-end text-muted"></i>
+                            </div>
+                            <div class="section-manager-item">
+                                <span class="fw-medium">Certificates</span>
+                                <i class="fas fa-grip-vertical float-end text-muted"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Preview Canvas -->
+            <div class="col-md-9 preview-canvas">
+                <div class="resume-preview p-5" id="resumePreview">
+                    <!-- Header -->
+                    <div class="text-center mb-4 pb-3 section-header" id="resumeHeader">
+                        <h1 class="h2 fw-bold mb-2" contenteditable="true" id="resumeName">John Doe</h1>
+                        <h2 class="h5 text-muted mb-3" contenteditable="true" id="resumeTitle">Software Engineer</h2>
+                        <div class="d-flex justify-content-center">
+                            <span class="text-muted me-3" contenteditable="true"
+                                id="resumeEmail">john.doe@email.com</span>
+                            <span class="text-muted">•</span>
+                            <span class="text-muted ms-3" contenteditable="true" id="resumePhone">(555) 123-4567</span>
+                        </div>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="mb-4" id="summarySection">
+                        <h3 class="h5 fw-semibold mb-3">Professional Summary</h3>
+                        <p class="text-muted lh-base" contenteditable="true" id="resumeSummary">
+                            Experienced software engineer with 5+ years developing scalable web applications using
+                            modern technologies.
+                        </p>
+                    </div>
+
+                    <!-- Experience -->
+                    <div class="mb-4" id="experienceSection">
+                        <h3 class="h5 fw-semibold mb-3">Professional Experience</h3>
+
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h4 class="h6 fw-semibold mb-1" contenteditable="true">Senior Software Engineer</h4>
+                                    <p class="text-muted mb-0" contenteditable="true">Tech Corp</p>
+                                </div>
+                                <small class="text-muted" contenteditable="true">2022 - Present</small>
+                            </div>
+                            <p class="text-muted" contenteditable="true">
+                                Lead development of microservices architecture serving 1M+ users daily.
+                            </p>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h4 class="h6 fw-semibold mb-1" contenteditable="true">Full Stack Developer</h4>
+                                    <p class="text-muted mb-0" contenteditable="true">StartupXYZ</p>
+                                </div>
+                                <small class="text-muted" contenteditable="true">2020 - 2022</small>
+                            </div>
+                            <p class="text-muted" contenteditable="true">
+                                Built responsive web applications using React, Node.js, and MongoDB.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Education -->
+                    <div class="mb-4" id="educationSection">
+                        <h3 class="h5 fw-semibold mb-3">Education</h3>
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h4 class="h6 fw-semibold mb-1" contenteditable="true">Bachelor of Computer Science</h4>
+                                <p class="text-muted mb-0" contenteditable="true">University of Technology</p>
+                            </div>
+                            <small class="text-muted" contenteditable="true">2020</small>
+                        </div>
+                    </div>
+
+                    <!-- Skills -->
+                    <div class="mb-4" id="skillsSection">
+                        <h3 class="h5 fw-semibold mb-3">Skills</h3>
+                        <div id="skillsContainer">
+                            <span class="skill-tag" contenteditable="true">JavaScript</span>
+                            <span class="skill-tag" contenteditable="true">React</span>
+                            <span class="skill-tag" contenteditable="true">Node.js</span>
+                            <span class="skill-tag" contenteditable="true">Python</span>
+                            <span class="skill-tag" contenteditable="true">MongoDB</span>
+                            <span class="skill-tag" contenteditable="true">AWS</span>
+                        </div>
+                    </div>
+
+                    <!-- Projects -->
+                    <div class="mb-4" id="projectsSection">
+                        <h3 class="h5 fw-semibold mb-3">Projects</h3>
+                        <div class="mb-3">
+                            <h4 class="h6 fw-semibold mb-2" contenteditable="true">E-commerce Platform</h4>
+                            <p class="text-muted" contenteditable="true">Full-stack web application with payment
+                                integration</p>
+                        </div>
+                    </div>
+
+                    <!-- Certificates -->
+                    <div id="certificatesSection">
+                        <h3 class="h5 fw-semibold mb-3">Certificates</h3>
+                        <ul class="list-unstyled">
+                            <li class="text-muted mb-2" contenteditable="true">• AWS Certified Developer</li>
+                            <li class="text-muted mb-2" contenteditable="true">• React Specialist</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // --- CONFIGURATION & STATE ---
+            const API_BASE_URL = 'http://localhost:5000/api'; // Make sure this matches your server's port
+            let currentUser = null;
+            let currentResume = null; // Holds the full data of the resume being edited
+
+            // --- DOM ELEMENTS ---
+            const loginScreen = document.getElementById('loginScreen');
+            const signupScreen = document.getElementById('signupScreen');
+            const dashboard = document.getElementById('dashboard');
+            const resumeBuilder = document.getElementById('resumeBuilder');
+
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+
+            const showSignupBtn = document.getElementById('showSignup');
+            const showLoginBtn = document.getElementById('showLogin');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const createNewResumeBtn = document.getElementById('createNewResume');
+            const backToDashboardBtn = document.getElementById('backToDashboard');
+
+            // --- HELPER FUNCTIONS ---
+            const getAuthHeaders = () => {
+                const token = localStorage.getItem('token');
+                return {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                };
+            };
+
+            const showScreen = (screenId) => {
+                [loginScreen, signupScreen, dashboard, resumeBuilder].forEach(screen => screen.classList.add('hidden'));
+                document.getElementById(screenId).classList.remove('hidden');
+            };
+
+            // --- AUTHENTICATION API CALLS ---
+            async function login(email, password) {
+                try {
+                    const res = await fetch(`${API_BASE_URL}/auth/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error || 'Login failed');
+
+                    localStorage.setItem('token', data.token);
+                    currentUser = data.user;
+
+                    document.getElementById('userName').textContent = currentUser.name;
+                    document.getElementById('userNameDash').textContent = currentUser.name;
+
+                    await loadUserResumes();
+                    showScreen('dashboard');
+                } catch (err) {
+                    alert(err.message);
+                }
+            }
+
+            async function signup(name, email, password) {
+                try {
+                    const res = await fetch(`${API_BASE_URL}/auth/register`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, email, password })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error || 'Signup failed');
+
+                    alert('Signup successful! Please log in.');
+                    signupForm.reset();
+                    showScreen('loginScreen');
+                } catch (err) {
+                    alert(err.message);
+                }
+            }
+
+            function logout() {
+                localStorage.removeItem('token');
+                currentUser = null;
+                currentResume = null;
+                showScreen('loginScreen');
+            }
+
+            // --- RESUME API CALLS ---
+            async function loadUserResumes() {
+                try {
+                    const res = await fetch(`${API_BASE_URL}/resumes`, { headers: getAuthHeaders() });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error);
+
+                    const container = document.getElementById('resumesContainer');
+                    container.querySelectorAll('.resume-col').forEach(card => card.remove());
+
+                    data.resumes.forEach(resume => {
+                        const card = createResumeCard(resume);
+                        container.appendChild(card);
+                    });
+                } catch (err) {
+                    alert(err.message);
+                    logout(); // If token is invalid, log out
+                }
+            }
+
+            async function createNewResume() {
+                const title = prompt("Enter a title for your new resume:", "Untitled Resume");
+                if (!title) return;
+
+                try {
+                    const res = await fetch(`${API_BASE_URL}/resumes`, {
+                        method: 'POST',
+                        headers: getAuthHeaders(),
+                        body: JSON.stringify({ title })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error);
+
+                    await loadUserResumes(); // Refresh the list
+                } catch (err) {
+                    alert(err.message);
+                }
+            }
+
+            async function deleteResume(resumeId) {
+                if (!confirm('Are you sure you want to delete this resume?')) return;
+                try {
+                    const res = await fetch(`${API_BASE_URL}/resumes/${resumeId}`, {
+                        method: 'DELETE',
+                        headers: getAuthHeaders()
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error);
+                    await loadUserResumes();
+                } catch (err) {
+                    alert(err.message);
+                }
+            }
+
+            async function editResume(resumeId) {
+                try {
+                    const res = await fetch(`${API_BASE_URL}/resumes/${resumeId}`, { headers: getAuthHeaders() });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error);
+
+                    currentResume = data.resume; // Store the full resume data
+                    populateBuilder(currentResume);
+                    showScreen('resumeBuilder');
+
+                } catch (err) {
+                    alert(err.message);
+                }
+            }
+
+            async function saveResume() {
+                if (!currentResume) return;
+
+                // Gather data from the editable fields
+                const updatedData = {
+                    title: document.getElementById('resumeName').textContent, // Assuming the name is the title
+                    data: {
+                        personalInfo: {
+                            name: document.getElementById('resumeName').textContent,
+                            title: document.getElementById('resumeTitle').textContent,
+                            email: document.getElementById('resumeEmail').textContent,
+                            phone: document.getElementById('resumePhone').textContent,
+                            summary: document.getElementById('resumeSummary').textContent,
+                        },
+                        // NOTE: Experience, Education, etc. would need more complex logic to gather from the DOM
+                    },
+                    // You can also gather formatting options here if needed
+                };
+
+                try {
+                    const res = await fetch(`${API_BASE_URL}/resumes/${currentResume._id}`, {
+                        method: 'PUT',
+                        headers: getAuthHeaders(),
+                        body: JSON.stringify(updatedData)
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error);
+
+                    alert('Resume saved successfully!');
+                } catch (err) {
+                    alert(err.message);
+                }
+            }
+
+
+            // --- UI RENDERING ---
+            function populateBuilder(resume) {
+                // Populate personal info
+                document.getElementById('resumeName').textContent = resume.data.personalInfo.name || '';
+                document.getElementById('resumeTitle').textContent = resume.data.personalInfo.title || '';
+                document.getElementById('resumeEmail').textContent = resume.data.personalInfo.email || '';
+                document.getElementById('resumePhone').textContent = resume.data.personalInfo.phone || '';
+                document.getElementById('resumeSummary').textContent = resume.data.personalInfo.summary || '';
+                // NOTE: Add logic here to render experience, education, skills etc. from the resume.data object
+            }
+
+            function createResumeCard(resume) {
+                const col = document.createElement('div');
+                col.className = 'col-md-4 mb-4 resume-col';
+                col.innerHTML = `
+            <div class="resume-card p-4 h-100 d-flex flex-column">
+                <div class="mb-3 flex-grow-1">
+                    <h5 class="fw-medium text-dark mb-1">${resume.title}</h5>
+                    <small class="text-muted">Modified ${resume.lastModified}</small>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary btn-sm flex-fill edit-btn" data-id="${resume.id}">
+                        <i class="fas fa-edit me-1"></i> Edit
+                    </button>
+                    <button class="btn btn-outline-danger btn-sm delete-btn" data-id="${resume.id}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>`;
+                return col;
+            }
+
+            // --- EVENT LISTENERS ---
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                login(e.target.querySelector('input[type="email"]').value, e.target.querySelector('input[type="password"]').value);
+            });
+
+            signupForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                signup(e.target.querySelector('input[type="text"]').value, e.target.querySelector('input[type="email"]').value, e.target.querySelector('input[type="password"]').value);
+            });
+
+            logoutBtn.addEventListener('click', logout);
+            createNewResumeBtn.addEventListener('click', createNewResume);
+            backToDashboardBtn.addEventListener('click', async () => {
+                await loadUserResumes();
+                showScreen('dashboard');
+            });
+
+            document.getElementById('resumesContainer').addEventListener('click', (e) => {
+                const button = e.target.closest('button');
+                if (!button) return;
+                const resumeId = button.dataset.id;
+                if (button.classList.contains('edit-btn')) {
+                    editResume(resumeId);
+                } else if (button.classList.contains('delete-btn')) {
+                    deleteResume(resumeId);
+                }
+            });
+
+            document.getElementById('saveResume').addEventListener('click', saveResume);
+            showSignupBtn.addEventListener('click', (e) => { e.preventDefault(); showScreen('signupScreen'); });
+            showLoginBtn.addEventListener('click', (e) => { e.preventDefault(); showScreen('loginScreen'); });
+
+            // --- INITIALIZATION ---
+            const token = localStorage.getItem('token');
+            if (token) {
+                // A more robust app would verify the token with the backend here
+                // For now, we'll assume it's valid and try to load resumes
+                showScreen('dashboard');
+                // We need user info from a profile endpoint to show the name on refresh
+                // For simplicity, we'll let the user log in again if they refresh the page.
+            } else {
+                showScreen('loginScreen');
+            }
+        });
+
+
+
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const loginScreen = document.getElementById("loginScreen");
+            const signupScreen = document.getElementById("signupScreen");
+            const showSignup = document.getElementById("showSignup");
+            const showLogin = document.getElementById("showLogin");
+
+            const loginForm = document.getElementById("loginForm");
+            const signupForm = document.getElementById("signupForm");
+
+            // Show signup page
+            showSignup.addEventListener("click", (e) => {
+                e.preventDefault();
+                loginScreen.classList.add("hidden");
+                signupScreen.classList.remove("hidden");
+            });
+
+            // Show login page
+            showLogin.addEventListener("click", (e) => {
+                e.preventDefault();
+                signupScreen.classList.add("hidden");
+                loginScreen.classList.remove("hidden");
+            });
+
+            // Login form handler
+            loginForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const email = loginForm.querySelector('input[type="email"]').value;
+                const password = loginForm.querySelector('input[type="password"]').value;
+
+                const res = await fetch("/api/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.status === 200) {
+                    localStorage.setItem("token", data.token);
+                    window.location.href = "/dashboard.html";
+                } else if (res.status === 404) {
+                    alert("Account not found! Please sign up first.");
+                    showSignup.click();
+                } else {
+                    alert(data.message || "Login failed. Please try again.");
+                }
+            });
+
+            // Signup form handler
+            signupForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const name = signupForm.querySelector('input[type="text"]').value;
+                const email = signupForm.querySelector('input[type="email"]').value;
+                const password = signupForm.querySelector('input[type="password"]').value;
+
+                const res = await fetch("/api/signup", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                if (res.status === 201) {
+                    alert("Signup successful! Please login.");
+                    showLogin.click();
+                } else {
+                    const data = await res.json();
+                    alert(data.message || "Signup failed. Try again.");
+                }
+            });
+
+        });
+
+    </script>
+</body>
+
+</html>
